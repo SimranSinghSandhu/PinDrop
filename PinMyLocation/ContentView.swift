@@ -8,21 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    
     var body: some View {
         ZStack {
-//            TabView {
-//                AllPinsView()
-//                    .tabItem {
-//                        Image(systemName: "pin.circle")
-//                    }
-//                
-//                MapScreenView()
-//                    .tabItem {
-//                        Image(systemName: "map.circle")
-//                    }
-//            }
-//            .tint(Color.black)
-            OnboardingView()
+            if hasSeenOnboarding {
+                TabView {
+                    MapScreenView()
+                        .tabItem {
+                            Image(systemName: "map.circle")
+                        }
+                    AllPinsView()
+                        .tabItem {
+                            Image(systemName: "pin.circle")
+                        }
+                }
+                .tint(Color.black)
+            } else {
+                OnboardingView()
+            }
         }
     }
 }

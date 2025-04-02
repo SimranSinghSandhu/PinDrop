@@ -17,6 +17,8 @@ struct OnboardingItem: Identifiable {
 
 struct OnboardingView: View {
     
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    
     @State private var permissionManager = PermissionManager()
     
     private var onboardingItems: [OnboardingItem] = [
@@ -64,6 +66,7 @@ struct OnboardingView: View {
                         } else {
                             Task {
                                 let _ = await permissionManager.requestPhotoLibraryPermissions()
+                                hasSeenOnboarding = true
                             }
                         }
                     } label: {
@@ -84,6 +87,7 @@ struct OnboardingView: View {
                             self.index += 1
                         } else {
                             print("Show map screen now!")
+                            hasSeenOnboarding = true
                         }
                     } label: {
                         Text("Skip")

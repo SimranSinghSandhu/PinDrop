@@ -23,7 +23,7 @@ struct CreatePinView: View {
     
     @State private var selectedCategoryId: String?
     
-    @Binding var coordinates: CLLocationCoordinate2D?
+    @Binding var myLocation: PinLocation?
     
     var body: some View {
         VStack(spacing: 30) {
@@ -89,12 +89,12 @@ struct CreatePinView: View {
                 
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Sahibzada Ajit Singh Nagar, Punjab, 140055")
+                        Text(myLocation?.address ?? "N/A")
                             .foregroundStyle(Color.black)
                             .font(.body)
                             .fontWeight(.medium)
                             .lineLimit(1)
-                        Text("\(coordinates?.latitude ?? 0.0), \(coordinates?.longitude ?? 0.0)")
+                        Text("\(myLocation?.coordinate.coordinate.latitude ?? 0.0), \(myLocation?.coordinate.coordinate.longitude ?? 0.0)")
                             .foregroundStyle(Color.black)
                             .font(.caption)
                             .fontWeight(.medium)
@@ -136,6 +136,6 @@ struct CreatePinView: View {
 }
 
 #Preview {
-    @Previewable @State var coordinates: CLLocationCoordinate2D?
-    CreatePinView(coordinates: $coordinates)
+    @Previewable @State var myLocation: PinLocation?
+    CreatePinView(myLocation: $myLocation)
 }
