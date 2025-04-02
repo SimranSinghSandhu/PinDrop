@@ -10,18 +10,19 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         ZStack {
-            TabView {
-                AllPinsView()
-                    .tabItem {
-                        Image(systemName: "pin.circle")
-                    }
-                
-                MapScreenView()
-                    .tabItem {
-                        Image(systemName: "map.circle")
-                    }
-            }
-            .tint(Color.black)
+//            TabView {
+//                AllPinsView()
+//                    .tabItem {
+//                        Image(systemName: "pin.circle")
+//                    }
+//                
+//                MapScreenView()
+//                    .tabItem {
+//                        Image(systemName: "map.circle")
+//                    }
+//            }
+//            .tint(Color.black)
+            OnboardingView()
         }
     }
 }

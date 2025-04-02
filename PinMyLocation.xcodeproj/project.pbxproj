@@ -253,10 +253,12 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PinGo;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSLocationUsageDescription = "to add locaiton of the pin";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "to add image for your pin";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -298,10 +300,12 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PinGo;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSLocationUsageDescription = "to add locaiton of the pin";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "to add locaiton of the pin";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "to add image for your pin";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
