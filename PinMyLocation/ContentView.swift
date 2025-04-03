@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     
@@ -29,6 +30,7 @@ struct ContentView: View {
                 OnboardingView()
             }
         }
+        .modelContainer(for: LocationPinItem.self)
     }
 }
 

@@ -18,9 +18,11 @@ struct ImagePreviewView: View {
             Rectangle()
                 .background(Color.black)
                 .ignoresSafeArea()
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
+            VStack{
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            }
             VStack {
                 HStack {
                     Button {
@@ -53,7 +55,6 @@ struct ImagePreviewView: View {
             }
             .padding(.horizontal, 16)
         }
-        
     }
     
 }

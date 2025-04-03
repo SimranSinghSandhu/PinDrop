@@ -6,25 +6,54 @@
 //
 
 import SwiftUI
+import SwiftData
+
+@Model
+class LocationPinItem {
+    @Attribute(.unique) var id: String = UUID().uuidString
+    var title: String
+    var category: String?
+    var imageData: Data?
+    var createdDate: Date
+    var isFav: Bool = false
+    
+    init(title: String, category: String?, image: UIImage?, createdDate: Date, isFav: Bool = false) {
+        self.title = title
+        self.category = category
+        self.imageData = image?.jpegData(compressionQuality: 0.8) // Convert UIImage to Data
+        self.createdDate = createdDate
+        self.isFav = isFav
+    }
+    
+    func getImage() -> UIImage? {
+        if let data = imageData {
+            return UIImage(data: data) // Convert Data back to UIImage
+        }
+        return nil
+    }
+}
 
 struct LocationPinView: View {
+    
+    @Binding var locationItem: LocationPinItem
+    
     var body: some View {
         ZStack(alignment: .leading) {
             HStack(spacing: 10) {
-                Image("dochiin")
+                Image(uiImage: locationItem.getImage() ?? UIImage(named: "dochiin")!)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 70, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Dochi")
+                        Text(locationItem.title)
                             .foregroundStyle(.primary)
                             .fontWeight(.bold)
-                        Text("Resturaunt")
+                        Text(locationItem.category ?? "Default")
                             .foregroundStyle(.primary)
                     }
-                    Text("Added on 25th Jan, 2025")
+                    Text("Added on \(formattedDate(date: locationItem.createdDate))")
                         .font(.caption)
                 }
                 Spacer()
@@ -48,8 +77,14 @@ struct LocationPinView: View {
         .padding(.vertical, 4)
         .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 4)
     }
+    
+    func formattedDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy" // Format: Jan 15, 2025
+        return formatter.string(from: date)
+    }
 }
 
 #Preview {
-    LocationPinView()
+    LocationPinView(locationItem: .constant(LocationPinItem(title: "Dummy", category: nil, image: nil, createdDate: Date())))
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftData
 import CoreLocation
 
 struct PinCategory: Identifiable {
@@ -17,16 +18,21 @@ struct PinCategory: Identifiable {
 
 struct CreatePinView: View {
     
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     @FocusState private var isFocused: Bool
     @State private var title: String = ""
     
     @State private var categories: [PinCategory] = []
     
-    @State private var selectedCategoryId: String?
+    @State private var selectedCategory: PinCategory = PinCategory(id: UUID().uuidString, title: "Travel")
     
     @Binding var myLocation: PinLocation?
     
     @State private var showCameraView = false
+    
+    @State private var selectedImage: UIImage?
     
     var body: some View {
         VStack(spacing: 30) {
@@ -47,15 +53,15 @@ struct CreatePinView: View {
                     HStack {
                         ForEach(categories) { category in
                             Button {
-                                selectedCategoryId = category.id
+                                selectedCategory.id = category.id
                             } label:{
                                 Text(category.title)
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 8)
-                                    .foregroundStyle(selectedCategoryId == category.id ? Color.black : Color.black)
+                                    .foregroundStyle(selectedCategory.id == category.id ? Color.black : Color.black)
                                     .overlay {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .foregroundStyle(selectedCategoryId == category.id ? Color.blue.opacity(0.25) : Color.gray.opacity(0.25))
+                                            .foregroundStyle(selectedCategory.id == category.id ? Color.blue.opacity(0.25) : Color.gray.opacity(0.25))
                                     }
                             }
                         }
@@ -76,15 +82,22 @@ struct CreatePinView: View {
                         } label: {
                             VStack {
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(style: StrokeStyle(lineWidth: 1.0))
-                                        .foregroundStyle(Color.gray.opacity(0.7))
-                                        .frame(width: 150, height: 150)
-                                    
-                                    Image(systemName: "camera.fill")
-                                        .font(.title)
-                                        .fontWeight(.medium)
-                                        .foregroundStyle(Color.gray.opacity(0.7))
+                                    if let selectedImage = selectedImage {
+                                        Image(uiImage: selectedImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 150, height: 150)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    } else {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(style: StrokeStyle(lineWidth: 1.0))
+                                            .foregroundStyle(Color.gray.opacity(0.7))
+                                            .frame(width: 150, height: 150)
+                                        Image(systemName: "camera.fill")
+                                            .font(.title)
+                                            .fontWeight(.medium)
+                                            .foregroundStyle(Color.gray.opacity(0.7))
+                                    }
                                 }
                             }
                         }
@@ -106,6 +119,8 @@ struct CreatePinView: View {
                     
                     Button {
                         print("Save pin button pressed!")
+                        saveLocation()
+                        dismiss()
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -126,7 +141,7 @@ struct CreatePinView: View {
             isFocused = true
         }
         .fullScreenCover(isPresented: $showCameraView) {
-            CameraView()
+            CameraView(selectedImage: $selectedImage)
         }
     }
     
@@ -139,6 +154,16 @@ struct CreatePinView: View {
                 PinCategory(id: UUID().uuidString, title: "Shops"),
                 PinCategory(id: UUID().uuidString, title: "Restaurants"),
                 PinCategory(id: UUID().uuidString, title: "Gyms/Fitness Centers")]
+    }
+    
+    private func saveLocation() {
+        let item = LocationPinItem(title: title, category: selectedCategory.title, image: selectedImage, createdDate: Date())
+        modelContext.insert(item)
+        print("Pin Saved!")
+        
+        // 🛠 Debug: Check if items exist
+        let allPins = try? modelContext.fetch(FetchDescriptor<LocationPinItem>())
+        print("All Pins:", allPins ?? "No Pins Found")
     }
 }
 

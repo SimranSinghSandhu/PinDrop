@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CameraView: View {
     
+    @Environment(\.dismiss) var dismiss
+    
     @StateObject private var cameraManager = CameraManager()
     @State private var capturedImage: UIImage? = nil
     @State private var isShowingPreviewImage = false
@@ -16,7 +18,7 @@ struct CameraView: View {
     @State private var dragOffset: CGSize = .zero
     @State private var dragOpacity: Double = 1.0
 
-    @State private var selectedImage: UIImage?
+    @Binding var selectedImage: UIImage?
     
     var body: some View {
         ZStack {
@@ -48,11 +50,29 @@ struct CameraView: View {
                         }
                 }
             }
+            VStack {
+                HStack {
+                    Button {
+                        print("close btn tapped")
+                        dismiss()
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundStyle(Color.gray)
+                                .frame(width: 44)
+                            Image(systemName: "xmark")
+                                .foregroundStyle(Color.white)
+                        }
+                    }
+                    Spacer()
+                }.padding(.leading, 16)
+                Spacer()
+            }
             
             if let image = capturedImage {
                 ZStack {
-                    Rectangle()
-                        .foregroundStyle(Color.black)
+//                    Rectangle()
+//                        .foregroundStyle(Color.black)
                     ImagePreviewView(image: image) {
                         self.capturedImage = nil  // Dismiss
                         self.cameraManager.startSession()
@@ -60,13 +80,14 @@ struct CameraView: View {
                         self.selectedImage = self.capturedImage
                         self.capturedImage = nil  // Dismiss
                         self.cameraManager.startSession()
+                        self.dismiss()
                     }
                     .offset(y: dragOffset.height)
                     .animation(.interactiveSpring(), value: dragOffset)
                     .opacity(dragOpacity)
                     .animation(.linear(duration: 0.1), value: dragOpacity)
                 }
-                .edgesIgnoringSafeArea(.all)
+//                .edgesIgnoringSafeArea(.all)
                 .gesture(
                     DragGesture()
                         .onChanged { value in
@@ -98,5 +119,5 @@ struct CameraView: View {
 }
 
 #Preview {
-    CameraView()
+    CameraView(selectedImage: .constant(nil))
 }
