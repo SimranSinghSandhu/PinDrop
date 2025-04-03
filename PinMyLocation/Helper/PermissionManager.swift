@@ -41,9 +41,7 @@ class PermissionManager: NSObject, ObservableObject {
         return await withCheckedContinuation {
             continuation in
             PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-                DispatchQueue.main.async {
-                    self.photoLibraryAuthorized = (status == .authorized || status == .limited)
-                }
+                continuation.resume(returning: (status == .authorized || status == .limited))
             }
         }
     }

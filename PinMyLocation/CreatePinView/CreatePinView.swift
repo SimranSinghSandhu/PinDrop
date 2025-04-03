@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 import CoreLocation
 
 struct PinCategory: Identifiable {
@@ -24,6 +25,8 @@ struct CreatePinView: View {
     @State private var selectedCategoryId: String?
     
     @Binding var myLocation: PinLocation?
+    
+    @State private var showCameraView = false
     
     var body: some View {
         VStack(spacing: 30) {
@@ -69,6 +72,7 @@ struct CreatePinView: View {
                     HStack(alignment: .top, spacing: 20) {
                         Button {
                             print("Adding Image button Tapped")
+                            self.showCameraView = true
                         } label: {
                             VStack {
                                 ZStack {
@@ -120,6 +124,9 @@ struct CreatePinView: View {
         .onAppear() {
             categories = addedCategories()
             isFocused = true
+        }
+        .fullScreenCover(isPresented: $showCameraView) {
+            CameraView()
         }
     }
     
