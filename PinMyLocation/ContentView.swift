@@ -20,7 +20,7 @@ struct ContentView: View {
                         .tabItem {
                             Image(systemName: "map.circle")
                         }
-                    AllPinsView()
+                    AllPinsView(locations: [])
                         .tabItem {
                             Image(systemName: "pin.circle")
                         }

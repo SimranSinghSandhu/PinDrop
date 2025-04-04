@@ -19,6 +19,9 @@ struct PinCategory: Identifiable {
 struct CreatePinView: View {
     
     @Environment(\.modelContext) private var modelContext
+    
+    @State private var swiftDataManager = SwiftDataManager()
+    
     @Environment(\.dismiss) private var dismiss
     
     @FocusState private var isFocused: Bool
@@ -157,13 +160,8 @@ struct CreatePinView: View {
     }
     
     private func saveLocation() {
-        let item = LocationPinItem(title: title, category: selectedCategory.title, image: selectedImage, createdDate: Date())
-        modelContext.insert(item)
-        print("Pin Saved!")
-        
-        // 🛠 Debug: Check if items exist
-        let allPins = try? modelContext.fetch(FetchDescriptor<LocationPinItem>())
-        print("All Pins:", allPins ?? "No Pins Found")
+        let item = LocationPinItem(title: title, category: selectedCategory.title, image: selectedImage, createdDate: Date(), lat: myLocation?.coordinate.coordinate.latitude ?? 0.0, lng: myLocation?.coordinate.coordinate.longitude ?? 0.0)
+        swiftDataManager.saveItem(for: item, modelContext: modelContext)
     }
 }
 
