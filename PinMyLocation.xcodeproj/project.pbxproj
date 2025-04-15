@@ -10,9 +10,22 @@
 		4E9B9E782D9BFBB400E1F0B7 /* PinMyLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PinMyLocation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4EC3965B2DA05836008F33A6 /* Exceptions for "PinMyLocation" folder in "PinMyLocation" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4E9B9E772D9BFBB400E1F0B7 /* PinMyLocation */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4E9B9E7A2D9BFBB400E1F0B7 /* PinMyLocation */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4EC3965B2DA05836008F33A6 /* Exceptions for "PinMyLocation" folder in "PinMyLocation" target */,
+			);
 			path = PinMyLocation;
 			sourceTree = "<group>";
 		};
@@ -253,6 +266,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PinMyLocation/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PinGo;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "to add locaiton of the pin";
@@ -302,6 +316,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PinMyLocation/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PinGo;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to add image for your pin";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "to add locaiton of the pin";

@@ -31,6 +31,9 @@ struct ContentView: View {
             }
         }
         .modelContainer(for: LocationPinItem.self)
+        .onOpenURL { url in
+            print("Opened with URL: \(url)")
+        }
     }
 }
 

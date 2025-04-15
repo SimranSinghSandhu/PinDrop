@@ -17,7 +17,7 @@ struct MapScreenView: View {
     
     @State private var permissionManager = PermissionManager()
     
-    @State private var position: MapCameraPosition = .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.7046, longitude: 76.7179), span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)))
+    @State private var position: MapCameraPosition = .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0.7046, longitude: 06.7179), span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)))
     
     @State private var myLocation: PinLocation?
     
@@ -26,6 +26,18 @@ struct MapScreenView: View {
     var body: some View {
         ZStack {
             Map(position: $position)
+            .onReceive(permissionManager.$userLocation) { location in
+                    if let location = location {
+                        position = .region(MKCoordinateRegion(
+                            center: location.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
+                        ))
+                    }
+                }
+            Image(systemName: "mappin")
+                .font(.system(size: 34))
+                .fontWeight(.bold)
+                .foregroundStyle(Color.red)
             VStack {
                 Spacer()
                 HStack {
@@ -33,12 +45,11 @@ struct MapScreenView: View {
                     Button {
                         if permissionManager.authorisationStatus == .authorizedWhenInUse || permissionManager.authorisationStatus == .authorizedAlways {
                             Task {
-                                if let location = await permissionManager.fetchUserLocation() {
-                                    if let address = await permissionManager.fetchAddress(from: location) {
-                                        
-                                        myLocation = PinLocation(coordinate: location, address: address)
-                                        self.showSheet.toggle()
-                                    }
+                                if let address = await permissionManager.fetchAddress(),
+                                   let location = permissionManager.userLocation {
+                                    
+                                    myLocation = PinLocation(coordinate: location, address: address)
+                                    self.showSheet.toggle()
                                 }
                             }
                         } else {

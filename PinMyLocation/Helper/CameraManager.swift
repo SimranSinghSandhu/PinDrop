@@ -79,7 +79,9 @@ class CameraManager: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     
     func stopSession() {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.session.stopRunning()
+            if self.session.isRunning {
+                self.session.stopRunning()
+            }
         }
     }
     

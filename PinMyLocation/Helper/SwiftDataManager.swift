@@ -20,7 +20,7 @@ struct SwiftDataManager {
     }
     
     func deleteItem(for item: LocationPinItem, modelContext: ModelContext) {
-        
+        modelContext.delete(item)
     }
     
     func updateItem(for item: LocationPinItem, modelContext: ModelContext) {

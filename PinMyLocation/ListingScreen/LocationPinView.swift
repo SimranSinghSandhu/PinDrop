@@ -39,8 +39,8 @@ class LocationPinItem {
 
 struct LocationPinView: View {
     
-    @Environment(\.modelContext) private var modelContext
-    @State private var swiftDataManager = SwiftDataManager()
+//    @Environment(\.modelContext) private var modelContext
+//    @State private var swiftDataManager = SwiftDataManager()
     @Binding var locationItem: LocationPinItem
     
     var body: some View {
@@ -64,24 +64,27 @@ struct LocationPinView: View {
                 }
                 Spacer()
                 ZStack(alignment: .trailing) {
-                    Button {
-                        print("isFav Toggle")
-                        swiftDataManager.updateItem(for: locationItem, modelContext: modelContext)
-                    } label: {
-                        Image(systemName: locationItem.isFav ? "heart.fill" : "heart")
-                            .font(.title3)
-                            .foregroundStyle(locationItem.isFav ? Color.red : Color.black)
-                    }
+//                    Button {
+//                        print("isFav Toggle")
+//                        swiftDataManager.updateItem(for: locationItem, modelContext: modelContext)
+//                    } label: {
+//                        Image(systemName: "paperplane")
+//                            .font(.title3)
+//                            .foregroundStyle(Color.black)
+//                    }
+                    Image(systemName: "paperplane")
+                        .font(.title3)
+                        .foregroundStyle(Color.black)
                 }
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 16)
-        .padding(.vertical, 4)
-        .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 4)
+//        .padding(.horizontal, 0)
+//        .padding(.vertical, 10)
+//        .background(Color.white)
+//        .clipShape(RoundedRectangle(cornerRadius: 12))
+//        .padding(.horizontal, 0)
+//        .padding(.vertical, 10)
+//        .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 4)
     }
     
     private func formattedDate(date: Date) -> String {

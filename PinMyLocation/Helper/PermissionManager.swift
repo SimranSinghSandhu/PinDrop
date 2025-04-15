@@ -21,12 +21,14 @@ class PermissionManager: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     @Published var authorisationStatus: CLAuthorizationStatus = .notDetermined
     private var authorizationContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
-    private var locationContinuation: CheckedContinuation<CLLocation?, Never>?
+//    private var locationContinuation: CheckedContinuation<CLLocation?, Never>?
 
     override init() {
         super.init()
-        self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 50 // meters
+        locationManager.startUpdatingLocation()
     }
     
     func requestCameraPermissions() async -> Bool {
@@ -58,35 +60,36 @@ class PermissionManager: NSObject, ObservableObject {
         }
     }
     
-    func fetchUserLocation() async -> CLLocation? {
-        print("Fetching user location")
-        return await withCheckedContinuation { continuation in
-            self.locationContinuation = continuation
-            locationManager.startUpdatingLocation()
-        }
-    }
+//    func fetchUserLocation() async -> CLLocation? {
+//        print("Fetching user location")
+//        return await withCheckedContinuation { continuation in
+//            self.locationContinuation = continuation
+//        }
+//    }
     
     func checkPermissions() {
         cameraAuthorized = AVCaptureDevice.authorizationStatus(for: .video) == .authorized
         photoLibraryAuthorized = PHPhotoLibrary.authorizationStatus() == .authorized || PHPhotoLibrary.authorizationStatus() == .limited
     }
     
-    func fetchAddress(from location: CLLocation) async -> String? {
+    func fetchAddress() async -> String? {
         return await withCheckedContinuation { continuation in
-            geocoder.reverseGeocodeLocation(location) { placemarks, error in
-                if let placemark = placemarks?.first {
-                    let address = [
-                        placemark.name,
-                        placemark.locality,
-                        placemark.administrativeArea,
-                        placemark.country
-                    ]
-                        .compactMap { $0 }
-                        .joined(separator: ", ")
-                    
-                    continuation.resume(returning: address)
-                } else {
-                    continuation.resume(returning: "Address not found")
+            if let location = userLocation {
+                geocoder.reverseGeocodeLocation(location) { placemarks, error in
+                    if let placemark = placemarks?.first {
+                        let address = [
+                            placemark.name,
+                            placemark.locality,
+                            placemark.administrativeArea,
+                            placemark.country
+                        ]
+                            .compactMap { $0 }
+                            .joined(separator: ", ")
+                        
+                        continuation.resume(returning: address)
+                    } else {
+                        continuation.resume(returning: "Address not found")
+                    }
                 }
             }
         }
@@ -107,10 +110,10 @@ extension PermissionManager: CLLocationManagerDelegate {
         DispatchQueue.main.async {
             self.userLocation = locations.last  // Get the most recent location
             print("Got user location")
-            self.locationManager.stopUpdatingLocation()
+//            self.locationManager.stopUpdatingLocation()
             
-            self.locationContinuation?.resume(returning: locations.last)
-            self.locationContinuation = nil
+//            self.locationContinuation?.resume(returning: locations.last)
+//            self.locationContinuation = nil
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 import PhotosUI
 import SwiftData
 import CoreLocation
@@ -160,8 +161,31 @@ struct CreatePinView: View {
     }
     
     private func saveLocation() {
-        let item = LocationPinItem(title: title, category: selectedCategory.title, image: selectedImage, createdDate: Date(), lat: myLocation?.coordinate.coordinate.latitude ?? 0.0, lng: myLocation?.coordinate.coordinate.longitude ?? 0.0)
-        swiftDataManager.saveItem(for: item, modelContext: modelContext)
+        if let image = selectedImage {
+            let item = LocationPinItem(title: title, category: selectedCategory.title, image: image, createdDate: Date(), lat: myLocation?.coordinate.coordinate.latitude ?? 0.0, lng: myLocation?.coordinate.coordinate.longitude ?? 0.0)
+           
+            swiftDataManager.saveItem(for: item, modelContext: modelContext)
+        }
+    }
+    
+    private func saveFileToiCloud(image: UIImage, name: String) {
+        if let imageURL = prepareImageForUpload(image) {
+            let asset = CKAsset(fileURL: imageURL)
+            let recordID = CKRecord.ID(recordName: name) // use the item's unique ID
+            let record = CKRecord(recordType: "PinImage", recordID: recordID)
+            record["image"] = asset
+            
+            let db = CKContainer.default().publicCloudDatabase
+            db.save(record) { savedRecord, error in
+                if let error = error {
+                    print("❌ CloudKit upload failed: \(error.localizedDescription)")
+                } else {
+                    print("✅ Image uploaded to iCloud with ID: \(name)")
+                    // Delete temp file
+                    try? FileManager.default.removeItem(at: imageURL)
+                }
+            }
+        }
     }
 }
 
